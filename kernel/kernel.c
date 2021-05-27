@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "string.h"
+
 // Acknowledgements: Thanks OS Dev Wiki for the initial kernel: https://wiki.osdev.org/Bare_Bones
 
 #if defined(__linux__)
@@ -40,17 +42,6 @@ static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
     return (uint16_t)uc | (uint16_t)color << 8;
-}
-
-size_t strlen(const char *str)
-{
-    size_t len = 0;
-    while (str[len])
-    {
-        ++len;
-    }
-
-    return len;
 }
 
 static const size_t VGA_WIDTH = 80;
