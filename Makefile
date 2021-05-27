@@ -16,7 +16,8 @@ LINKER_DIR := linker
 CC := $(TOOLS_DIR)/i686-elf-gcc
 ASM := $(TOOLS_DIR)/i686-elf-as
 
-CC_FLAGS := -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CC_FLAGS := -ffreestanding -O2 -Wall -Wextra
+LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc
 
 all: assemble_boot compile_kernel link_everything
 
@@ -28,4 +29,4 @@ compile_kernel:
 	$(CC) -c $(KERNEL_DIR)/kernel.c -o $(OBJ_DIR)/kernel.o $(CC_FLAGS)
 
 link_everything:
-	$(CC) -T $(LINKER_DIR)/linker.ld -o $(OBJ_DIR)/snail.bin -ffreestanding -O2 -nostdlib $(OBJ_DIR)/boot.o $(OBJ_DIR)/kernel.o -lgcc
+	$(CC) -T $(LINKER_DIR)/linker.ld -o snail.bin $(OBJ_DIR)/boot.o $(OBJ_DIR)/kernel.o $(LINKER_FLAGS)

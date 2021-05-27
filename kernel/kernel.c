@@ -9,7 +9,7 @@
 #endif
 
 #if !defined(__i386__)
-#error "This kernel needs to be compiled with a ix86-elf compiler for now."
+#error "This kernel needs to be compiled with a i386-elf compiler."
 #endif
 
 enum vga_color
@@ -113,8 +113,10 @@ void terminal_writestring(const char *data)
     terminal_write(data, strlen(data));
 }
 
-void kernel_main(void)
+int main(void)
 {
     terminal_initialize();
-    terminal_writestring("Hello, kernel world!\n");
+    terminal_writestring("Snail v0.0.1");
+
+    return 0;
 }

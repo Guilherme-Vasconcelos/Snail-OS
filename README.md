@@ -1,5 +1,5 @@
 # Snail
-Snail is (aims to be) a tiny operating system.
+Snail is a tiny operating system made from scratch for leaning purposes.
 
 ### Setup
 1. Pre-requisites: your system should be able to build a modern version of
@@ -11,11 +11,16 @@ compile binutils and a cross-platform GCC, which is required until Snail (if it 
 a compiler on its own. The new binaries will be available at <snail_root_dir>/opt/cross/bin
 
 3. After the build finishes, optionally run `export PATH="<SNAIL_ROOT_DIR>/opt/cross/bin:$PATH"`
-to add the new GCC to your path for the current session.
+to add the new GCC to your path for the current session, which can be useful for small tests,
+but probably not required since the Makefile will already use the correct compiler.
 
 4. Run `make` to compile the software and it will generate a `snail.bin` file.
 
 5. Boot the bin file into QEMU with `qemu-system-i386 -kernel snail.bin`
+
+6. Alternatively to step 5, you can use grub-mkrescue to generate a `.iso` file and then
+boot the file into QEMU with `qemu-system-i386 -cdrom snail.iso`. More instructions on how to
+use grub-mkrescue can be found [here](https://wiki.osdev.org/Bare_Bones#Building_a_bootable_cdrom_image).
 
 ### Acknowledgements
 

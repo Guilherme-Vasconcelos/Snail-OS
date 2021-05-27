@@ -1,4 +1,4 @@
-/* Acknowledgements: Again thanks OSDev Wiki for the minimal linker https://wiki.osdev.org/Bare_Bones */
+/* Linker script provided by: https://wiki.osdev.org/Bare_Bones#Linking_the_Kernel */
 
 /* The bootloader will look at this image and start execution at the symbol designated at the entry point */
 ENTRY(_start)
