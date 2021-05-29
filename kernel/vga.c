@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "vga.h"
 #include "string.h"
@@ -21,7 +22,7 @@ static inline uint16_t vga_entry(unsigned char c, uint8_t color)
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
-static const size_t VGA_BUFFER_ADDR = 0xB8000;
+static const size_t VGA_TEXT_BUFFER_ADDR = 0xB8000;
 
 size_t vga_term_row, vga_term_column;
 uint8_t vga_term_color;
@@ -32,7 +33,7 @@ void vga_term_initialize(enum vga_color font_color, enum vga_color backgroud_col
     vga_term_row = 0;
     vga_term_column = 0;
     vga_term_color = vga_entry_color(font_color, backgroud_color);
-    vga_term_buffer = (uint16_t *) VGA_BUFFER_ADDR;
+    vga_term_buffer = (uint16_t *) VGA_TEXT_BUFFER_ADDR;
     for (size_t y = 0; y < VGA_HEIGHT; ++y)
     {
         for (size_t x = 0; x < VGA_WIDTH; ++x)
@@ -56,14 +57,31 @@ void vga_term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 
 void vga_term_putchar(char c)
 {
-    vga_term_put_entry_at(c, vga_term_color, vga_term_column, vga_term_row);
-    if (++vga_term_column == VGA_WIDTH)
+    /* TODO: in the future there has to be some kind of table for all possible
+    chars that are not directly printed to the screen, such as \n (already implemented)
+    and \t.
+    TODO: also, this whole reset row logic will need to be altered soon since it doesn't
+    make much sense. */
+
+    bool to_reset_row = false;
+    if (c == '\n')
     {
         vga_term_column = 0;
-        if (++vga_term_row == VGA_HEIGHT)
+        to_reset_row = ++vga_term_row == VGA_HEIGHT;
+    }
+    else
+    {
+        vga_term_put_entry_at(c, vga_term_color, vga_term_column, vga_term_row);
+        if (++vga_term_column == VGA_WIDTH)
         {
-            vga_term_row = 0;
+            vga_term_column = 0;
+            to_reset_row = ++vga_term_row == VGA_HEIGHT;
         }
+    }
+
+    if (to_reset_row)
+    {
+        vga_term_row = 0;
     }
 }
 

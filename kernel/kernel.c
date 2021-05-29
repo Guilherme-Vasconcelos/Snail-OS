@@ -17,7 +17,14 @@
 int main(void)
 {
     vga_term_initialize(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-    vga_term_writestring("Snail v0.0.1");
+    vga_term_writestring(
+        "Snail v0.0.1\n"
+        "Copyright (c) Guilherme-Vasconcelos\n\n"
+        "Snail is free software licensed under "
+        "the GNU General Public License, either\n"
+        "version 3 or any later versions.\n"
+        "Check it out: https://github.com/Guilherme-Vasconcelos/Snail-OS\n"
+    );
 
     return 0;
 }

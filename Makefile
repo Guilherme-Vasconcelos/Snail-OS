@@ -2,34 +2,35 @@
 # Also, another limitation currently is that kernel source files and lib source files cannot have
 # the same name.
 
-# Tools to use when assembling, compiling, linking, etc.
+## Tools to use when assembling, compiling, linking, etc.
 TOOLS_DIR := opt/cross/bin
 
-# Where to put object and binary files
+## Where to put object and binary files
 OBJ_DIR := bin
 
-# Source code directories
+## Source code directories
 KERNEL_DIR := kernel
 LIB_DIR := lib
 IDIR := include
 BOOT_DIR := boot
 LINKER_DIR := linker
 
-# Compiler / assembler
+## Compiler / assembler
 CC := $(TOOLS_DIR)/i686-elf-gcc
 ASM := $(TOOLS_DIR)/i686-elf-as
 
-# Flags
+## Flags
 CC_FLAGS := -ffreestanding -O2 -Wall -Wextra -I$(IDIR)
 LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc
 
-# Source code files
+## Source code files
 KERNEL_SRC_FILES := $(wildcard $(KERNEL_DIR)/*.c)
 LIB_SRC_FILES := $(wildcard $(LIB_DIR)/*.c)
 
-# Obj files
+## Obj files
 KERNEL_OBJ_FILES := $(KERNEL_SRC_FILES:$(KERNEL_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIB_OBJ_FILES := $(LIB_SRC_FILES:$(LIB_DIR)/%.c=$(OBJ_DIR)/%.o)
+# Do not use := here. This has to be lazily evaluated because obj files themselves aren't created until much later.
 ALL_OBJ_FILES = $(wildcard $(OBJ_DIR)/*.o)
 
 all: prepare assemble_boot compile_kernel compile_lib link_everything
