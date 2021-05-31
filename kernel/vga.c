@@ -17,7 +17,7 @@ static inline uint8_t vga_entry_color(enum vga_color font_color, enum vga_color 
 
 static inline uint16_t vga_entry(unsigned char c, uint8_t color)
 {
-    return (uint16_t) c | (uint16_t) color << 8;
+    return (uint16_t)c | (uint16_t)color << 8;
 }
 
 static const size_t VGA_WIDTH = 80;
@@ -33,7 +33,7 @@ void vga_term_initialize(enum vga_color font_color, enum vga_color backgroud_col
     vga_term_row = 0;
     vga_term_column = 0;
     vga_term_color = vga_entry_color(font_color, backgroud_color);
-    vga_term_buffer = (uint16_t *) VGA_TEXT_BUFFER_ADDR;
+    vga_term_buffer = (uint16_t *)VGA_TEXT_BUFFER_ADDR;
     for (size_t y = 0; y < VGA_HEIGHT; ++y)
     {
         for (size_t x = 0; x < VGA_WIDTH; ++x)
@@ -49,6 +49,22 @@ void vga_term_setcolor(uint8_t color)
     vga_term_color = color;
 }
 
+void vga_term_nextline()
+{
+    vga_term_column = 0;
+    ++vga_term_row;
+}
+
+void vga_term_horizontal_scroll()
+{
+    const size_t last_element_index = VGA_HEIGHT * VGA_WIDTH;
+    const size_t last_element_addr = (size_t)(&(vga_term_buffer[last_element_index]));
+    // FIXME: something here feels wrong, I believe it may be copying more bytes than it should
+    const size_t nbytes_to_copy = last_element_addr - (size_t)vga_term_buffer;
+    memmove(vga_term_buffer, &(vga_term_buffer[VGA_WIDTH]), nbytes_to_copy);
+    vga_term_row = VGA_HEIGHT - 1;
+}
+
 void vga_term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 {
     const size_t index = y * VGA_WIDTH + x;
@@ -57,31 +73,25 @@ void vga_term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 
 void vga_term_putchar(char c)
 {
-    /* TODO: in the future there has to be some kind of table for all possible
-    chars that are not directly printed to the screen, such as \n (already implemented)
-    and \t.
-    TODO: also, this whole reset row logic will need to be altered soon since it doesn't
-    make much sense. */
+    if (vga_term_row == VGA_HEIGHT)
+    {
+        vga_term_horizontal_scroll();
+    }
 
-    bool to_reset_row = false;
     if (c == '\n')
     {
-        vga_term_column = 0;
-        to_reset_row = ++vga_term_row == VGA_HEIGHT;
+        /* TODO: in the future there has to be some kind of table for all possible
+    chars that are not directly printed to the screen, such as \n (already implemented)
+    and \t. */
+        vga_term_nextline();
     }
     else
     {
         vga_term_put_entry_at(c, vga_term_color, vga_term_column, vga_term_row);
         if (++vga_term_column == VGA_WIDTH)
         {
-            vga_term_column = 0;
-            to_reset_row = ++vga_term_row == VGA_HEIGHT;
+            vga_term_nextline();
         }
-    }
-
-    if (to_reset_row)
-    {
-        vga_term_row = 0;
     }
 }
 
