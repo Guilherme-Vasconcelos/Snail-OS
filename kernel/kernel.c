@@ -6,7 +6,8 @@
 #include "vga.h"
 #include "string.h"
 
-#if defined(__linux__)
+#if defined(WIN32) or defined(_WIN32) or defined(__WIN32__) \
+    or defined(__NT__) or defined(__APPLE__) or defined(__linux__)
 #error "Do not use the system's default compiler, but rather a cross-compiler. Check setup_compiler.sh."
 #endif
 
