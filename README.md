@@ -2,8 +2,8 @@
 Snail is a tiny operating system made from scratch for leaning purposes.
 
 ### Setup
-1. Pre-requisites: your system should be able to build a modern version of
-GCC and GNU Binutils. Check which exact versions are being used at `setup_compiler.sh`.
+1. Pre-requisites: your system should be able to build a modern version of GNU GCC
+and GNU Binutils. Check which exact versions are being used at `setup_compiler.sh`.
 If you cannot build these versions, try changing them to older values (you can find a list
 of successful builds [here](https://wiki.osdev.org/Cross-Compiler_Successful_Builds)).
 
