@@ -23,7 +23,8 @@ enum vga_color
 
 /**
  * Initializes vga_term to be used with the given colors.
- * Call `vga_term_writestring` if you'd like to use the vga terminal.
+ * @param font_color font color for vga term characters
+ * @param background_color background color for vga term characters
  */
 void vga_term_initialize(enum vga_color font_color, enum vga_color backgroud_color);
 
