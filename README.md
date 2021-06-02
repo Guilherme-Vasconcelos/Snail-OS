@@ -1,5 +1,5 @@
 # Snail
-Snail is a tiny operating system made from scratch for leaning purposes.
+Snail is a (work in progress) tiny operating system made from scratch for leaning purposes.
 
 ### Setup
 1. Pre-requisites: your system should be able to build a modern version of GNU GCC
